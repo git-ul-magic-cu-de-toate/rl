@@ -1,0 +1,32 @@
+ssh-keygen -t rsa
+
+Apesi enter pana iti genereaza si iti afiseaza cheia
+
+ssh-copy-id PC1
+
+Scrii yes si apesi enter
+
+ssh-copy-id PC2
+
+Scrii yes si apesi enter
+
+ssh-copy-id PC-X
+
+Scrii yes si apesi enter
+
+In fisierul ~/.ssh/config din host scrii:
+Este indicat sa amesteci declaratiile de host, pentru a nu fi similar cu alte teme.
+
+host pc1
+	HostName PC1
+	User student
+
+host pc2
+	HostName PC2
+	User student
+
+host pc-x
+	HostName PC-X
+	User student
+
+

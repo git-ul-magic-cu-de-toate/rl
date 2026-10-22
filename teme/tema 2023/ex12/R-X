@@ -1,0 +1,10 @@
+auto eth-host
+iface eth-host
+	address 10.11.106.6/30
+	gateway 10.11.106.5
+
+	up cat /etc/hosts.orig >> /etc/hosts
+
+auto eth-pc-x
+iface eth-pc-x
+	address 172.18.62.65/29

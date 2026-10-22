@@ -1,0 +1,142 @@
+/32	255.255.255.255	0.0.0.0	1	1
+/31	255.255.255.254	0.0.0.1	2	2*
+/30	255.255.255.252	0.0.0.3	4	2
+/29	255.255.255.248	0.0.0.7	8	6
+/28	255.255.255.240	0.0.0.15	16	14
+/27	255.255.255.224	0.0.0.31	32	30
+/26	255.255.255.192	0.0.0.63	64	62
+/25	255.255.255.128	0.0.0.127	128	126
+/24	255.255.255.0	0.0.0.255	256	254
+/23	255.255.254.0	0.0.1.255	512	510
+/22	255.255.252.0	0.0.3.255	1,024	1,022
+/21	255.255.248.0	0.0.7.255	2,048	2,046
+/20	255.255.240.0	0.0.15.255	4,096	4,094
+/19	255.255.224.0	0.0.31.255	8,192	8,190
+/18	255.255.192.0	0.0.63.255	16,384	16,382
+/17	255.255.128.0	0.0.127.255	32,768	32,766
+/16	255.255.0.0	0.0.255.255	65,536	65,534
+/15	255.254.0.0	0.1.255.255	131,072	131,070
+/14	255.252.0.0	0.3.255.255	262,144	262,142
+/13	255.248.0.0	0.7.255.255	524,288	524,286
+/12	255.240.0.0	0.15.255.255	1,048,576	1,048,574
+/11	255.224.0.0	0.31.255.255	2,097,152	2,097,150
+/10	255.192.0.0	0.63.255.255	4,194,304	4,194,302
+/9	255.128.0.0	0.127.255.255	8,388,608	8,388,606
+/8	255.0.0.0	0.255.255.255	16,777,216	16,777,214
+/7	254.0.0.0	1.255.255.255	33,554,432	33,554,430
+/6	252.0.0.0	3.255.255.255	67,108,864	67,108,862
+/5	248.0.0.0	7.255.255.255	134,217,728	134,217,726
+/4	240.0.0.0	15.255.255.255	268,435,456	268,435,454
+/3	224.0.0.0	31.255.255.255	536,870,912	536,870,910
+/2	192.0.0.0	63.255.255.255	1,073,741,824	1,073,741,822
+/1	128.0.0.0	127.255.255.255	2,147,483,648	2,147,483,646
+/0	0.0.0.0	255.255.255.255	4,294,967,296	4,294,967,294
+
+pentru conexiuni: intre rutere de 2 ori send ca sa fim siguri.
+rutarea trebuie facuta in ambele sensuri ca sa mearga
+
+Creat VLAN:
+Switch(config)#vlan 100
+Switch(config-vlan)#exit
+Switch(config)#int Fa0/1
+Switch(config-if)#sw mo acc
+Switch(config-if)#sw acc vlan 100
+Switch(config-if)#no sh
+Switch(config-if)#exit
+
+VLAN MANAGEMENT:
+Dezactivați și Ștergeți Adresa IP de pe Vlan 1:
+Switch# configure terminal
+Switch(config)# interface vlan 1
+Switch(config-if)# no ip address
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+
+Configurați Adresa IP pe Interfața Vlan 100:
+Switch(config)# interface vlan 100
+Switch(config-if)# ip address 192.168.1.254 255.255.255.0
+Switch(config-if)# no shutdown
+Switch(config-if)# exit
+
+Salvați Configurația:
+Switch# write memory
+sau
+Switch# copy running-config startup-config
+
+
+Verificați Configurația trunk:
+
+Switch1# show interfaces trunk
+Trebuie pus trunk all pe ambele interfete intre care se face legatura
+
+Router on a stick:
+Router7(config)#interface FastEthernet1/0
+Router7(config-if)#interface Fa1/0.10
+Router7(config-subif)#encapsulation dot1Q 10
+Router7(config-subif)#no sh
+Router7(config-subif)#exit
+
+pe switch access cu vlanul ala
+
+------------------------------------------------------------------------------
+LINUX
+
+Adrese ip:
+ip address add 10.200.40.142/30 dev eth0
+ip route add default via 10.200.40.141
+
+!!! Activat RUTAREA pe host sau routere:
+sysctl -w net.ipv4.ip_forward=1
+
+Conectivitate internet:
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+ping 8.8.8.8
+
+Tabela ARP:
+ip neighbor show
+
+
+SSH:
+su username
+ssh-keygen
+ssh-copy-id student@green sau copiat manual
+
+IPTABLES - de pus pe host sau routere:
+iptables -A FORWARD -s blue -d red -p icmp -j ACCEPT
+iptables -A FORWARD -s blue -d red -p tcp --dport telnet -j ACCEPT
+
+REDIRECTARE PORT:
+iptables -t nat -A PREROUTING -p tcp --dport 10022 -j DNAT --to-destination 192.168.1.2:22
+
+ce vine de la red de pe un port spre green cu alt port:
+iptables -t nat -A PREROUTING -s 192.168.1.2 -p tcp --dport 20022 -j DNAT --to-destination 192.168.2.2:22
+test: din red: ssh -l student host -p 20022 
+
+CAPTURA TRAFIC:
+tcpdump -i eth0 host ocw.cs.pub.ro -w capture.pcap
+sau dst host
+
+ALIAS SSH:
+vim ~/.ssh/config
+
+Host green
+    HostName green.example.com  # Replace with the actual hostname or IP address
+    User student
+
+ssh green
+chmod 600 ~/.ssh/config
+
+COPIERE RECURSIVA:
+scp -r nokia student@green:/home/student
+
+CURL cu salavre in fisier din /home/ana de pe red:
+curl --user "ana:student" -O ftp://red/ana-ftp-file-5M.dat
+
+CURL UPLOAD in /home/ana de pe red:
+curl --user "ana:student" --upload-file kurwa ftp://red/
+
+WGET RECURSIV:
+wget --ftp-user=ana --ftp-password=student -r -nH ftp://red/nokia
+
+ASCULTAM PE PORT UDP:
+nc -u -l -p PORT

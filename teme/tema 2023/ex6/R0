@@ -1,0 +1,10 @@
+iptables -A FORWARD -s PC1 -d PC-X -p udp --dport 8977 -j DROP
+iptables -A FORWARD -s PC3 -d PC-X -p udp --dport 8977 -j DROP
+iptables -A FORWARD -s PC2 -d PC-X -p udp --dport 8977 -j DROP
+iptables -A FORWARD -p tcp --dport 22 -s PC3 ! -d 10.13.61.0/25 -j DROP
+iptables -A FORWARD -p tcp --dport 25 -s PC3 ! -d 10.13.61.0/25 -j DROP
+iptables -A FORWARD -s PC2 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -d PC2 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -d PC2 -p tcp --dport 22 -j ACCEPT
+iptables -A FORWARD -d PC2 -p icmp --icmp-type echo-request -j ACCEPT
+iptables -A FORWARD -d PC2 -j DROP

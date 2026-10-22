@@ -1,0 +1,11 @@
+1. STP pe topologie
+2. cum se schimbe antetele daca trimit doua pachete
+3. Daca A transmite catre B si face ARP Poisoning, ce se schimba in retea si la ce alt atac ajuta ARP Poisoning?
+4. subnetare optima
+5. subiect cu iptables
+6. Doua routere rulau OSPF si langa ele se rula BGP, ce rol au routerele in topologia de OSPF?( raspuns probabil: de granita/ASBR)
+7. Doua routere erau in acelasi AS si rulau BGP, iar fiecare router rula BGP cu cate un ISP, ISP-urile faceau parte din AS-uri diferite.
+Se transmiteau rutele invatate din BGP de catre cele doua routere cu ISP intre ele? (raspuns: da, pentru ca rutele invatate prin eBGP se transmit)
+8. Pentru wireless, de ce se trece la o frecventa din ce in ce mai mare(doua motive) si inca doua motive pentru care nu ar merge bine internetul acasa
+
+Playlist: https://youtube.com/playlist?list=PLLmyygmuHhLBXC2DOof1GqlPmuvSCkDpU&si=ek60ZGinamrmV6M7

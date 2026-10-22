@@ -1,0 +1,65 @@
+sudo iptables -A FORWARD -s blue -d red -p icmp -j ACCEPT --> accept pachete icmp de la blue la red
+sudo iptables -A FORWARD -s blue -d red -p tcp --dport telnet -j ACCEPT --> accept conectare telnet de la blue la red
+sudo iptables -A FORWARD -s blue -d red -j REJECT --> refuz orice conexiune de la blue la red
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE --> conectare la internet pe interfata eth0 + activare forward!!!!!!
+sudo iptables -t nat -A PREROUTING -p tcp --dport 12345 -j DNAT --to-destination blue:22 --> redirectez conectarea ssh de pe green pe host la blue(ssh -p 12345 host --> ma conecteaza la blue)
+sudo tcpdump -i eth0 -w capture.pcap host ocw.cs.pub.ro --> pun in capture.pcap o captura
+nmap -sT -sV -T5 -Pn --top-ports=100 ocw.cs.pub.ro --> porturile deschise (serviciile) si sistemul de operare de pe ocw.cs.pub.ro
+sudo iptables -A OUTPUT -p tcp -d ocw.cs.pub.ro --dport 443 -j REJECT --> blocheaza conexiunea care s-ar obtine cu tcpdump de mai sus
+ip link set up dev eth0 --> pornesc interfata eth0
+sudo sysctl -w net.ipv4.ip_forward=1 --> activez forwarding
+sudo iptables -A INPUT -s <IP_ADDRESS> -j DROP --> blochez orice vine de la adresa IP respectiva
+tcpdump -i {interfata} -w traffic_capture.pcap
+# analiza wireshark
+tshark -r traffic_capture.pcap
+tcpdump -r capture.pcap
+sudo lsof -i @<IP_ADDRESS>
+sudo netstat -tulnp
+nmap -sV <IP_ADDRESS>
+
+
+Ex2e
+====
+
+Realizati configurarile necesare pentru a permite rutarea inter-VLAN, astfel incat sa existe conectivitate intre toate statiile din cadranul roz.
+Atentie: pentru configuratiile de tip Router on a Stick, respectati conventia: numarul subinterfetei = numarul VLAN-ului.
+
+Avem un router care duce la un switch 4 (cu vlan 10) si la un switch5 (cu vlan20)
+
+Nu trebuie puse adrese IP pe interfetele fizice principale (fa1/0 si fa4/0). Adresele IP se configureaza doar pe subinterfete.
+
+Router7>en
+Router7#conf t
+Router7(config)#int fa1/0.10
+Router7(config-subif)#encapsulation dot1Q 10
+Router7(config-subif)#ip addr 10.10.10.1 255.255.255.0 --> asta era default gateway-ul din subreteaua respectiva
+Router7(config-subif)#no sh
+Router7(config-subif)#exit
+Router7(config)#int fa4/0.20
+Router7(config-subif)#encapsulation dot1Q 20
+Router7(config-subif)#ip addr 10.10.20.1 255.255.255.0 --> asta era default gateway-ul din subreteaua respectiva
+Router7(config-subif)#no sh
+Router7(config-subif)#exit
+Router7(config)#int fa1/0
+Router7(config-if)#no sh
+Router7(config-if)#exit
+Router7(config)#int fa4/0
+Router7(config-if)#no sh
+
+Switch4:
+
+Switch>en
+Switch#conf t
+Switch(config)#int fa0/1
+Switch(config-if)#no sh
+Switch(config-if)#sw mode trunk
+Switch(config-if)#sw trunk allowed vlan all
+Switch(config-if)#exit
+
+Switch5:
+
+Switch>en
+Switch(config)#int fa4/1
+Switch(config-if)#no sh
+Switch(config-if)#sw mode trunk
+Switch(config-if)#sw trunk allowed vlan all

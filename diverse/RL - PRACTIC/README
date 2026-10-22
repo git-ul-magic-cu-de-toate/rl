@@ -1,0 +1,28 @@
+Salut pentru a rezolva aceasta tema, ai comenzi si text de copiat in fiecare director.
+Fiecare director contine la randul lui un README cu instructiuni. Daca ai nevoie de ajutor nu evita sa ma contactezi.
+
+Este recomandat sa rezolvi exercitiile 1,2,3 in acelasi timp, apoi sa testezi. Daca exista neclaritati sau probleme
+nu raspund la nicio intrebare.
+
+Pentru inceput scrie continutul de pe RLChecker, de pe Moodle, in fisierul /root/assignment.txt
+
+
+La final, dupa ce ai terminat exercitiile si ai dat check, daca totul a mers ok, ruleaza comenzile:
+
+iptables-save > /etc/iptables/rules
+nano /etc/network/if-pre-up.d/iptables (sau il poti numi cum vrei tu, recomand)
+In care pui:
+
+#!/bin/sh
+iptables-restore < /etc/iptables/rules
+
+Apoi rulezi:
+
+chmod +x /etc/network/if-pre-up.d/iptables
+
+Le rulezi pentru a salva persistent iptables de pe o statie.
+Aceste comnezi le rulezi, pe toate statile.
+
+Recomand sa stergi istoricul de pe toate statiile, in caz de orice. history -c
+
+NU RASPUND DACA ITI IEI COPIAT!!

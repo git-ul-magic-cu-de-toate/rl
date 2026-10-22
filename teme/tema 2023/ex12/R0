@@ -1,0 +1,21 @@
+auto eth-host
+iface eth-host
+	address 10.11.106.2/30
+	gateway 10.11.106.1
+
+        address FEC0:5017:62:69::2/64
+        gateway FEC0:5017:62:69::1
+
+	up cat /etc/hosts.orig >> /etc/hosts
+
+# VLAN 10 sub-interface
+auto eth-sw.10
+iface eth-sw.10
+	address 10.13.61.1/25
+	address 2023:E666:106:61:10::1/80
+
+# VLAN 20 sub-interface
+auto eth-sw.20
+iface eth-sw.20
+	address 10.13.61.129/25
+	address 2023:E666:106:61:20::1/80

@@ -1,0 +1,6 @@
+auto eth0
+iface eth0
+	address 10.13.61.2/25
+	gateway 10.13.61.1
+
+	up cat /etc/hosts.orig >> /etc/hosts

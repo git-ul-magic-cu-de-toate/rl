@@ -1,0 +1,18 @@
+Pentru aceste 2 exercitii, trebuie sa scrii continutul fiecarui fisier in /etc/network/interfaces.d/rl.conf
+
+De exemplu, pentru PC-X, rulezi, de pe host:
+
+go PC-X
+nano /etc/network/interfaces.d/rl.conf
+
+host reprezinta instanta de pe OpenStack la care te conectezi prima data.
+
+De asemenea, pentru a avea rutarea activata, pe Router0, host si RouterX, trebuie sa rulezi:
+
+nano /etc/sysctl.conf
+Gasesti linia comentat unde scrie net.ipv4.ip_forward=1 si o decomentezi.
+Salvezi si iesi din fisier.
+
+Rulezi:
+sysctl -p
+Acum ar trebui sa ai rutarea activata pe cele 3 statii, persistenta.

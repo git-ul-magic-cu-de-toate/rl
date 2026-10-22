@@ -1,0 +1,1 @@
+iptables -t nat -A PREROUTING -p udp --dport 6174 -j DNAT --to-destination 172.18.62.70:8977

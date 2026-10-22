@@ -1,0 +1,4 @@
+sudo (nano|vim) /etc/hosts.orig
+Vezi ex12, pentru detalii aditionale.
+Pentru acest exercitiu, trebuie sa scrii in /etc/hosts.orig, continutul fiecarui fisier, in functie de nume.
+

@@ -1,0 +1,6 @@
+auto eth0
+iface eth0
+	address 172.18.62.70/29
+	gateway 172.18.62.65
+
+	up cat /etc/hosts.orig >> /etc/hosts
